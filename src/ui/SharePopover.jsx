@@ -45,7 +45,7 @@ export default function SharePopover({ movie }) {
       </button>
 
       {open && (
-        <div className="absolute top-12 right-0 z-50 bg-dark-bg border border-white/10 rounded-xl p-4 shadow-xl w-64">
+        <div className="absolute top-12 right-0 z-50 bg-black border border-white/10 rounded-xl p-4 shadow-xl w-64">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-white text-sm font-semibold">Share this</h3>
             <button onClick={() => setOpen(false)}>
@@ -109,7 +109,7 @@ export default function SharePopover({ movie }) {
 
           <button
             onClick={handleWebShare}
-            className="w-full text-sm bg-accent text-black font-medium rounded p-2 hover:brightness-110 transition"
+            className="w-full text-sm bg-accent text-white font-medium rounded p-2 hover:brightness-110 transition"
           >
             Native Share
           </button>
