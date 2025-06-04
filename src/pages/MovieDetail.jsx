@@ -37,7 +37,7 @@ export default function MovieDetail() {
         onClick={() => navigate(-1)}
         className="flex items-center gap-2 mb-6 hover:text-accent transition-colors"
       >
-        <FiArrowLeft /> Back to results
+        <FiArrowLeft /> Back
       </button>
 
       <div className="flex flex-col md:flex-row gap-6">
