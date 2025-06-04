@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 export default function SearchOverlay({ isOpen, onClose }) {
   const inputRef = useRef(null);
   const { query, setQuery } = useAppContext();
-  const { movies, isLoading, error } = useMovies(query);
+  const { fetchedMovies, isLoading, error } = useMovies(query);
 
   // Handle escape key and auto-focus
   useEffect(() => {
@@ -79,7 +79,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
               animate={{ opacity: 1, y: 0 }}
               className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
             >
-              {movies.map((movie) => (
+              {fetchedMovies.map((movie) => (
                 <Link
                   key={movie.id}
                   to={`/movie/${movie.id}`}
@@ -95,7 +95,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
         </AnimatePresence>
 
         {/* Empty State */}
-        {!isLoading && movies.length === 0 && query.length >= 2 && (
+        {!isLoading && fetchedMovies.length === 0 && query.length >= 2 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
