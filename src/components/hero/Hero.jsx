@@ -3,12 +3,15 @@ import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiPlay, FiPlus, FiInfo, FiChevronDown } from "react-icons/fi";
 import { useDynamicMovies } from "../../hooks/useDynamicMovies";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import HeroSkeleton from "./HeroSkeleton";
 import HeroError from "./HeroError";
 import { useAppContext } from "../../contexts/AppContext";
 
 export default function Hero() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const { dynamicMovie, isLoading, error } =
     useDynamicMovies("trending/movie/day");
 
@@ -27,6 +30,21 @@ export default function Hero() {
   };
 
   const displayMovie = mainMovie || fallbackMovie;
+
+  // Watch for #see-trailer hash in the URL and scroll into view
+
+  const navigateToTrailer = () => {
+    const moviePath = `/movie/${mainMovie.id}#see-trailer`;
+
+    if (location.pathname === `/movie/${mainMovie.id}`) {
+      // Already on the page → just scroll
+      const el = document.getElementById("see-trailer");
+      el?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Navigate → useEffect will handle scrolling after route change
+      navigate(moviePath);
+    }
+  };
 
   // Prevent infinite re-renders by guarding context update
   useEffect(() => {
@@ -101,6 +119,7 @@ export default function Hero() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-md font-semibold hover:bg-gray-100 transition"
+              onClick={navigateToTrailer}
             >
               <FiPlay className="text-lg" /> Watch Trailer
             </motion.button>

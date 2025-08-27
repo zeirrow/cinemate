@@ -5,17 +5,29 @@ import RelatedMovies from "../components/RelatedMovies";
 import RateIt from "../components/RateIt";
 import { useTrailer } from "../hooks/useTrailer";
 import SharePopover from "../ui/SharePopover";
+import { useEffect } from "react";
 
 export default function MovieDetail() {
   const { id } = useParams();
-  const { state } = useLocation();
+  const location = useLocation();
+  const { state } = location;
   const navigate = useNavigate();
 
-  const { movies, handleAddBookmark, handleRemoveBookmark, bookmarkedMovies } = useAppContext();
+  const { movies, handleAddBookmark, handleRemoveBookmark, bookmarkedMovies } =
+    useAppContext();
   const movie = state?.movie || movies.find((m) => m.id === parseInt(id));
   const isBookmarked = bookmarkedMovies.some((m) => m.id === movie?.id);
 
   const { trailerKey, isLoading: loadingTrailer } = useTrailer(movie?.id);
+
+  useEffect(() => {
+    if (location.hash === "#see-trailer") {
+      const el = document.getElementById("see-trailer");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
 
   if (!movie) {
     return (
@@ -40,7 +52,7 @@ export default function MovieDetail() {
         <FiArrowLeft /> Back
       </button>
 
-      <div className="flex flex-col md:flex-row gap-6">
+      <section className="flex flex-col md:flex-row gap-6">
         <div className="w-full md:w-1/3">
           <img
             src={
@@ -59,13 +71,18 @@ export default function MovieDetail() {
         <div className="flex-1">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold mb-2">{movie.title}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+                {movie.title}
+              </h1>
               <p className="text-gray-400 mb-4">
                 {movie.release_date?.split("-")[0]} •{" "}
                 {movie.runtime
                   ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`
                   : "N/A"}{" "}
-                • {movie.vote_average ? `⭐ ${movie.vote_average.toFixed(1)}/10` : ""}
+                •{" "}
+                {movie.vote_average
+                  ? `⭐ ${movie.vote_average.toFixed(1)}/10`
+                  : ""}
               </p>
             </div>
             <div className="flex gap-2">
@@ -80,8 +97,7 @@ export default function MovieDetail() {
               >
                 <FiBookmark className={isBookmarked ? "text-red-400" : ""} />
               </button>
-                <SharePopover movie={movie} />
-
+              <SharePopover movie={movie} />
             </div>
           </div>
 
@@ -121,9 +137,9 @@ export default function MovieDetail() {
             </div>
           )}
         </div>
-      </div>
+      </section>
 
-      <div className="mt-10">
+      <section id="see-trailer" className="mt-10">
         <h2 className="text-xl font-semibold mb-4">Trailer</h2>
         {loadingTrailer && <p className="text-accent">Loading trailer...</p>}
         {!loadingTrailer && trailerKey ? (
@@ -139,7 +155,7 @@ export default function MovieDetail() {
         ) : !loadingTrailer ? (
           <p className="text-gray-500">No trailer available.</p>
         ) : null}
-      </div>
+      </section>
 
       <RelatedMovies movie={movie} />
     </div>
