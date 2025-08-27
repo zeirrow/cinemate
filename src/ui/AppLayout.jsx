@@ -11,7 +11,7 @@ const AppLayout = () => {
     <>
       <Header />
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-      <main className="container mt-15">
+      <main className="mt-15">
         <Outlet />
       </main>
       <Footer />
